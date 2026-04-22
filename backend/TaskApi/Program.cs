@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-// builder.Services.AddSingleton<TaskService>();
+builder.Services.AddSingleton<TaskService>();
 
 builder.Services.AddCors(options =>
 {
