@@ -10,8 +10,14 @@ export function useTasks(filter) {
 
     const getTasks = async () => {
         setLoading(true);
+        setError(null);
+
         try {
-            const url = filter ? `${API}?status=${filter}` : API;
+            const url =
+                filter && filter !== "all"
+                    ? `${API}?status=${filter}`
+                    : API;
+
             const res = await axios.get(url);
             setTasks(res.data);
         } catch (err) {
@@ -22,23 +28,35 @@ export function useTasks(filter) {
     };
 
     const createTask = async (task) => {
-        await axios.post(API, task);
-        getTasks();
+        try {
+            await axios.post(API, task);
+            getTasks();
+        } catch {
+            setError("Error al crear tarea");
+        }
     };
 
     const updateTask = async (id, task) => {
-        await axios.put(`${API}/${id}`, task);
-        getTasks();
+        try {
+            await axios.put(`${API}/${id}`, task);
+            getTasks();
+        } catch {
+            setError("Error al actualizar tarea");
+        }
     };
 
     const deleteTask = async (id) => {
-        await axios.delete(`${API}/${id}`);
-        getTasks();
+        try {
+            await axios.delete(`${API}/${id}`);
+            getTasks();
+        } catch {
+            setError("Error al eliminar tarea");
+        }
     };
 
     useEffect(() => {
         getTasks();
-    }, [filter]); // 🔥 clave
+    }, [filter]);
 
     return {
         tasks,

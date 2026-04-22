@@ -3,12 +3,13 @@ import { useTasks } from "./hooks/useTasks";
 import { TaskList } from "./components/TaskList";
 import { TaskForm } from "./components/TaskForm";
 
+import { Container, Typography, Select, MenuItem } from "@mui/material";
+
 function App() {
-    
-    const [selectedTask, setSelectedTask] = useState(null);
     const [filter, setFilter] = useState("");
     const { tasks, loading, error, createTask, updateTask, deleteTask } = useTasks(filter);
-    
+    const [selectedTask, setSelectedTask] = useState(null);
+
     const handleSave = (task) => {
         if (task.id) {
             updateTask(task.id, task);
@@ -18,30 +19,37 @@ function App() {
         setSelectedTask(null);
     };
 
-    if (loading) return <p>Cargando...</p>;
-    if (error) return <p>{error}</p>;
+    if (loading) return <Typography>Cargando...</Typography>;
+    if (error) return <Typography color="error">{error}</Typography>;
 
     return (
-        <div style={{ padding: 20, maxWidth: 600 }}>
-            <h1>Gestor de Tareas</h1>
+        <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Typography variant="h4" gutterBottom>
+                Gestor de Tareas
+            </Typography>
 
-            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                <option value="">Todas</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="en progreso">En progreso</option>
-                <option value="completada">Completada</option>
-            </select>
+            <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                renderValue={(selected) => {
+                    if (selected === "all") return "Todas";
+                    return selected;
+                }}
+            >
+                <MenuItem value="all">Todas</MenuItem>
+                <MenuItem value="pendiente">Pendiente</MenuItem>
+                <MenuItem value="en progreso">En progreso</MenuItem>
+                <MenuItem value="completada">Completada</MenuItem>
+            </Select>
 
             <TaskForm onSave={handleSave} selectedTask={selectedTask} />
-
-            {tasks.length === 0 && <p>No hay tareas</p>}
 
             <TaskList
                 tasks={tasks}
                 onDelete={deleteTask}
                 onEdit={setSelectedTask}
             />
-        </div>
+        </Container>
     );
 }
 

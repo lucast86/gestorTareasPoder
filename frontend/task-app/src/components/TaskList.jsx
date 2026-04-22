@@ -1,34 +1,27 @@
+import { Card, CardContent, Typography, Button } from "@mui/material";
+
 export function TaskList({ tasks, onDelete, onEdit }) {
 
     if (!tasks || tasks.length === 0) {
-        return <p>No hay tareas</p>;
+        return <Typography>No hay tareas</Typography>;
     }
 
     return (
-        <div>
+        <>
             {tasks.map(t => (
-                <div key={t.id} style={{
-                    border: "1px solid #ccc",
-                    borderRadius: 6,
-                    marginBottom: 10,
-                    padding: 10
-                }}>
-                    <h3>{t.titulo}</h3>
-                    <p>{t.descripcion}</p>
-                    <strong>{t.estado}</strong>
-                    <br />
+                <Card key={t.id} sx={{ mb: 2 }}>
+                    <CardContent>
+                        <Typography variant="h6">{t.titulo}</Typography>
+                        <Typography>{t.descripcion}</Typography>
+                        <Typography color="text.secondary">{t.estado}</Typography>
 
-                    <button onClick={() => onEdit(t)}>Editar</button>
-
-                    <button onClick={() => {
-                        if (confirm("¿Eliminar tarea?")) {
-                            onDelete(t.id);
-                        }
-                    }}>
-                        Eliminar
-                    </button>
-                </div>
+                        <Button onClick={() => onEdit(t)}>Editar</Button>
+                        <Button color="error" onClick={() => onDelete(t.id)}>
+                            Eliminar
+                        </Button>
+                    </CardContent>
+                </Card>
             ))}
-        </div>
+        </>
     );
 }

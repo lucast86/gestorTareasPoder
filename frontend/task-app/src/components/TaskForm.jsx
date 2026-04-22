@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { TextField, Button, Select, MenuItem } from "@mui/material";
 
 export function TaskForm({ onSave, selectedTask }) {
     const [form, setForm] = useState({
@@ -27,46 +28,46 @@ export function TaskForm({ onSave, selectedTask }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        if (!form.titulo) {
-            alert("El título es obligatorio");
-            return;
-        }
+        if (!form.titulo) return alert("Título obligatorio");
 
         onSave(form);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h3>{selectedTask ? "Editar tarea" : "Nueva tarea"}</h3>
-
-            <input
+        <form onSubmit={handleSubmit} style={{ marginBottom: 20 }}>
+            <TextField
+                fullWidth
                 name="titulo"
-                placeholder="Título"
+                label="Título"
                 value={form.titulo}
                 onChange={handleChange}
+                sx={{ mb: 1 }}
             />
 
-            <input
+            <TextField
+                fullWidth
                 name="descripcion"
-                placeholder="Descripción"
+                label="Descripción"
                 value={form.descripcion}
                 onChange={handleChange}
+                sx={{ mb: 1 }}
             />
 
-            <select
+            <Select
+                fullWidth
                 name="estado"
                 value={form.estado}
                 onChange={handleChange}
+                sx={{ mb: 1 }}
             >
-                <option value="pendiente">Pendiente</option>
-                <option value="en progreso">En progreso</option>
-                <option value="completada">Completada</option>
-            </select>
+                <MenuItem value="pendiente">Pendiente</MenuItem>
+                <MenuItem value="en progreso">En progreso</MenuItem>
+                <MenuItem value="completada">Completada</MenuItem>
+            </Select>
 
-            <button type="submit">
+            <Button variant="contained" type="submit">
                 {selectedTask ? "Actualizar" : "Guardar"}
-            </button>
+            </Button>
         </form>
     );
 }
